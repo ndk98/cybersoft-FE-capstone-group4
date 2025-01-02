@@ -1,9 +1,7 @@
-import React from "react";
-
 export default function BookingListPage() {
     return (
         <>
-            <h1 className="text-3xl font-extrabold dark:text-white">Quản Lý Đặt Phòng</h1>
+            <h1 className="text-xl font-extrabold dark:text-white">Danh Sách Đặt Phòng</h1>
             <div className="my-10">
                 <div className="my-6 mx-10 flex flex-col lg:flex-row justify-between">
                     <div>
@@ -22,9 +20,7 @@ export default function BookingListPage() {
                                    placeholder="Tìm kiếm đặt phòng"/>
                         </div>
                     </div>
-                    <div>
-                        <button className="px-4 py-1 bg-cyan-700 text-white rounded font-semibold">Thêm</button>
-                    </div>
+                    <div></div>
                 </div>
 
 
@@ -85,11 +81,12 @@ export default function BookingListPage() {
                             <td className="px-6 py-4">
                                 1
                             </td>
-                            <td className="px-6 py-4 flex justify-around">
+                            <td className="px-6 py-4 flex gap-2">
                                 <a href="#"
-                                   className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
-                                <a href="#"
-                                   className="font-medium text-red-600 dark:text-red-500 hover:underline">Xoá</a>
+                                   className="font-medium text-blue-600 px-2 py-2 border border-gray-200 rounded">Sửa</a>
+                                <button
+                                    className="font-medium text-red-600 px-2 py-2 border border-gray-200 rounded">Xoá
+                                </button>
                             </td>
                         </tr>
                         </tbody>
@@ -112,18 +109,6 @@ export default function BookingListPage() {
                             <li>
                                 <a href="#"
                                    className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-                            </li>
-                            <li>
-                                <a href="#" aria-current="page"
-                                   className="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
                             </li>
                             <li>
                                 <a href="#"
