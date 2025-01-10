@@ -3,7 +3,7 @@ export default function UserListPage() {
         <>
             <h1 className="text-xl font-extrabold">Danh Sách Người Dùng</h1>
             <div className="my-10">
-                <div className="my-6 mx-10 flex flex-col lg:flex-row justify-between">
+                <div className="flex flex-col gap-2 my-6 lg:mx-10 lg:flex-row lg:gap-0 justify-between">
                     <div>
                         <label htmlFor="table-search" className="sr-only">Search</label>
                         <div className="relative">
@@ -21,7 +21,7 @@ export default function UserListPage() {
                         </div>
                     </div>
                     <div>
-                        <button className="px-4 py-1 bg-secondary text-white rounded font-semibold">Tạo mới</button>
+                        <button className="px-4 py-1 bg-secondary text-white rounded font-semibold">Thêm mới</button>
                     </div>
                 </div>
 
