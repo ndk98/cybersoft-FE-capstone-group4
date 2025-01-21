@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 export default function AuthRegister() {
@@ -9,7 +9,7 @@ export default function AuthRegister() {
     const [password, setPassword] = useState("");
     const [phone, setPhone] = useState("");
     const [birthday, setBirthday] = useState("");
-    let [gender, setGender] = useState(true);
+    const [gender, setGender] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const role = "ADMIN";
@@ -18,8 +18,7 @@ export default function AuthRegister() {
         e.preventDefault();
 
         try {
-            gender = Boolean(gender);
-            const response = await fetch("/api/auth/register", {
+            const response = await fetch("/api/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -28,7 +27,7 @@ export default function AuthRegister() {
                     password,
                     phone,
                     birthday,
-                    gender,
+                    gender: Boolean(gender),
                     role,
                 }),
             });
@@ -43,7 +42,7 @@ export default function AuthRegister() {
                 setPassword("");
                 setPhone("");
                 setBirthday("");
-                setGender(true);
+                setGender("");
             } else {
                 setSuccess("");
                 setError(data.message);

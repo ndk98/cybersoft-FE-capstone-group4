@@ -1,38 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import Link from "next/link";
-
-import { useAuth } from "../AuthContext";
 
 export default function AuthLogin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const router = useRouter();
-    const { login } = useAuth();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            const response = await fetch("/api/auth", {
+            const res = await fetch("/api/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
 
-            const data = await response.json();
+            const data = await res.json();
 
-            if (response.ok) {
-                login(data.user, data.token);
-                router.push("/admin");
+            if (res.ok) {
+                window.location.href = "/admin";
             } else {
                 setError(data.message);
             }
         } catch (err: any) {
-            setError(err.response?.data?.message || "Login failed");
+            setError(err.response?.data?.message || "Đăng nhập thất bại");
         }
     };
 

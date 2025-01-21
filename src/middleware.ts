@@ -1,20 +1,19 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(request: NextRequest) {
-    const url = request.nextUrl.clone();
+export function middleware(req: NextRequest) {
+    const url = req.nextUrl.clone();
 
-    const adminToken = request.cookies.get("admin_token")?.value;
+    const authCookie = req.cookies.get("auth")?.value;
 
     if (url.pathname.startsWith("/admin")) {
-        if (!adminToken) {
+        if (!authCookie) {
             url.pathname = "/auth/login";
             return NextResponse.redirect(url);
         }
     }
 
     if (url.pathname.startsWith("/auth")) {
-        if (adminToken) {
+        if (authCookie) {
             url.pathname = "/admin";
             return NextResponse.redirect(url);
         }

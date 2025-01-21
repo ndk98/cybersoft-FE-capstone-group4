@@ -2,20 +2,54 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import profileImage from "../../../../../public/images/profile-picture-5.jpg";
-import GetUserFromCookie from "app/(admin)/admin/user/GetUserFromCookie";
-import { useAuth } from "app/(admin)/auth/AuthContext";
+
+interface User {
+    name: string;
+    email: string;
+}
 
 export default function Header() {
-    //const user = GetUserFromCookie();
+    const [user, setUser] = useState<User | null>(null);
 
-    const user = {
-        name: "Admin",
-        email: "khoand1@gmail.com",
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch("/api/verify", {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                if (res.status === 401) {
+                    window.location.href = "/admin";
+                }
+
+                const data = await res.json();
+
+                setUser(data.user);
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            const res = await fetch("/api/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            if (res.ok) {
+                window.location.href = "/auth/login";
+            }
+        } catch (error) {
+            console.error("Failed to fetch data:", error);
+        }
     };
-
-    const { logout } = useAuth();
 
     return (
         <header className="fixed top-0 z-50 w-full bg-white border-b border-gray-200">
@@ -101,7 +135,7 @@ export default function Header() {
                                                 href="#"
                                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 role="menuitem"
-                                                onClick={() => logout()}
+                                                onClick={handleLogout}
                                             >
                                                 Đăng xuất
                                             </Link>

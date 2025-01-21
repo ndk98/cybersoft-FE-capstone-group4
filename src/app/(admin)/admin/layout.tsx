@@ -4,7 +4,6 @@ import React from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Sidebar from "./components/Sidebar";
-import { AuthProvider } from "../auth/AuthContext";
 
 export const metadata: Metadata = {
     title: "Airbnb Admin",
@@ -17,7 +16,7 @@ export default function AdminLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <AuthProvider>
+        <>
             <Header />
 
             <Sidebar />
@@ -27,6 +26,6 @@ export default function AdminLayout({
             </div>
 
             <Footer />
-        </AuthProvider>
+        </>
     );
 }
