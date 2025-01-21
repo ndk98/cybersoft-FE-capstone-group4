@@ -4,11 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+import { useAuth } from "../AuthContext";
+
 export default function AuthLogin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const router = useRouter();
+    const { login } = useAuth();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,7 +26,7 @@ export default function AuthLogin() {
             const data = await response.json();
 
             if (response.ok) {
-                document.cookie = `admin_token=${data.token}; path=/;`;
+                login(data.user, data.token);
                 router.push("/admin");
             } else {
                 setError(data.message);
@@ -40,7 +43,9 @@ export default function AuthLogin() {
                 <div className="text-xl font-semibold text-center">
                     Đăng nhập quản trị viên
                 </div>
-                {error && <p style={{ color: "red" }}>{error}</p>}
+                {error && (
+                    <p className="mt-8 text-red-500 font-semibold">{error}</p>
+                )}
                 <form onSubmit={handleLogin}>
                     <div className="mt-4">
                         <input

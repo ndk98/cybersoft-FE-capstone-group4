@@ -1,9 +1,10 @@
-import type {Metadata} from "next";
+import type { Metadata } from "next";
 import React from "react";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Sidebar from "./components/Sidebar";
+import { AuthProvider } from "../auth/AuthContext";
 
 export const metadata: Metadata = {
     title: "Airbnb Admin",
@@ -11,23 +12,21 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLayout({
-                                        children,
-                                    }: Readonly<{
+    children,
+}: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <>
-            <Header/>
+        <AuthProvider>
+            <Header />
 
-            <Sidebar/>
+            <Sidebar />
 
             <div className="p-4 sm:ml-64">
-                <div className="p-4 mt-14">
-                    {children}
-                </div>
+                <div className="p-4 mt-14">{children}</div>
             </div>
 
-            <Footer/>
-        </>
+            <Footer />
+        </AuthProvider>
     );
 }

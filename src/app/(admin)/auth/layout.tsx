@@ -1,5 +1,7 @@
-import type {Metadata} from "next";
+import type { Metadata } from "next";
 import React from "react";
+
+import { AuthProvider } from "../auth/AuthContext";
 
 export const metadata: Metadata = {
     title: "Airbnb Authorizations",
@@ -7,13 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function AuthRootLayout({
-                                           children,
-                                       }: {
-    children: React.ReactNode
+    children,
+}: {
+    children: React.ReactNode;
 }) {
-    return (
-        <>
-            {children}
-        </>
-    )
+    return <AuthProvider>{children}</AuthProvider>;
 }

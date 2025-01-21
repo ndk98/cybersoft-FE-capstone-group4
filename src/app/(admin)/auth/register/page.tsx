@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function AuthRegister() {
@@ -10,7 +9,7 @@ export default function AuthRegister() {
     const [password, setPassword] = useState("");
     const [phone, setPhone] = useState("");
     const [birthday, setBirthday] = useState("");
-    const [gender, setGender] = useState("");
+    let [gender, setGender] = useState(true);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const role = "ADMIN";
@@ -19,6 +18,7 @@ export default function AuthRegister() {
         e.preventDefault();
 
         try {
+            gender = Boolean(gender);
             const response = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -36,12 +36,20 @@ export default function AuthRegister() {
             const data = await response.json();
 
             if (response.ok) {
+                setError("");
                 setSuccess(data.message);
+                setName("");
+                setEmail("");
+                setPassword("");
+                setPhone("");
+                setBirthday("");
+                setGender(true);
             } else {
+                setSuccess("");
                 setError(data.message);
             }
         } catch (err: any) {
-            setError(err.response?.data?.message || "Login failed");
+            setError(err.response?.data?.message || "Register failed");
         }
     };
 
@@ -52,8 +60,14 @@ export default function AuthRegister() {
                 <div className="text-xl font-semibold text-center">
                     Đăng ký quản trị viên
                 </div>
-                {error && <p style={{ color: "red" }}>{error}</p>}
-                {success && <p style={{ color: "green" }}>{success}</p>}
+                {error && (
+                    <p className="mt-8 text-red-500 font-semibold">{error}</p>
+                )}
+                {success && (
+                    <p className="mt-8 text-lime-500 font-semibold">
+                        {success}
+                    </p>
+                )}
                 <form onSubmit={handleRegister}>
                     <div className="mt-4">
                         <input

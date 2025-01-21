@@ -20,6 +20,8 @@ export async function POST(request: Request) {
 
     const data = await response.json();
 
+    console.log(data);
+
     if (!response.ok) {
         const {content, statusCode} = data;
 
@@ -30,9 +32,8 @@ export async function POST(request: Request) {
 
     if (data.statusCode = 200) {
         return NextResponse.json({
-            user: data.content.user,
-            token: data.content.token,
-            message: 'Đăng ký`	 thành công.'
+            user: data.content,
+            message: 'Đăng ký thành công.'
         }, {status: 200});
     }
 
