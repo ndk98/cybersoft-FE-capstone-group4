@@ -1,4 +1,9 @@
+"use client";
+
 import { api } from "app/utils/api/axios";
+import { useEffect, useState } from "react";
+import UserListItem from "../components/UserListItem";
+import UserListPaginate from "../components/UserListPaginate";
 
 interface User {
     id: number;
@@ -9,63 +14,34 @@ interface User {
     gender: boolean;
 }
 
-export default async function UserListPage() {
-    let userListHtml;
-    try {
-        const response = await api.get("/users/phan-trang-tim-kiem", {
-            params: {
-                pageIndex: 1,
-                pageSize: 10,
-                keyword: "",
-            },
-        });
-        const resData = response.data;
-        userListHtml = resData.content.data.map((user: User) => {
-            return (
-                <tr className="bg-white border-b" key={user.id}>
-                    <td className="w-4 p-4">
-                        <div className="flex items-center">
-                            <input
-                                id="checkbox-table-search-1"
-                                type="checkbox"
-                                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                            />
-                            <label
-                                htmlFor="checkbox-table-search-1"
-                                className="sr-only"
-                            >
-                                checkbox
-                            </label>
-                        </div>
-                    </td>
-                    <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                    >
-                        {user.id}
-                    </th>
-                    <td className="px-6 py-4">{user.name}</td>
-                    <td className="px-6 py-4">{user.email}</td>
-                    <td className="px-6 py-4">{user.phone}</td>
-                    <td className="px-6 py-4">{user.birthDate}</td>
-                    <td className="px-6 py-4">{user.gender}</td>
-                    <td className="px-6 py-4 flex gap-2">
-                        <a
-                            href="#"
-                            className="font-medium text-blue-600 px-2 py-2 border border-gray-200 rounded"
-                        >
-                            Sửa
-                        </a>
-                        <button className="font-medium text-red-600 px-2 py-2 border border-gray-200 rounded">
-                            Xoá
-                        </button>
-                    </td>
-                </tr>
-            );
-        });
-    } catch (error) {
-        console.error(error);
-    }
+export default function UserListPage() {
+    const pageSize = 10;
+    const [pageIndex, setPageIndex] = useState(1);
+    const [keyword, setKeyword] = useState("");
+    const [userList, setUserList] = useState("");
+
+    useEffect(() => {
+        const getUserList = async () => {
+            try {
+                const res = await api.get("/users/phan-trang-tim-kiem", {
+                    params: {
+                        pageIndex,
+                        pageSize,
+                        keyword,
+                    },
+                });
+                const resData = res.data;
+                const userList = resData.content.data.map((user: User) => {
+                    return <UserListItem user={user} key={user.id} />;
+                });
+                setUserList(userList);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getUserList();
+    }, [pageIndex, pageSize, keyword]);
 
     return (
         <>
@@ -149,82 +125,15 @@ export default async function UserListPage() {
                                 <th scope="col" className="px-6 py-3"></th>
                             </tr>
                         </thead>
-                        <tbody>{userListHtml}</tbody>
+                        <tbody>{userList}</tbody>
                     </table>
-                    <nav
-                        className="flex items-center flex-column flex-wrap md:flex-row justify-between p-4"
-                        aria-label="Table navigation"
-                    >
-                        <span className="text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-                            Hiển thị{" "}
-                            <span className="font-semibold text-gray-900">
-                                1-10
-                            </span>{" "}
-                            của{" "}
-                            <span className="font-semibold text-gray-900">
-                                1000
-                            </span>
-                        </span>
-                        <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700"
-                                >
-                                    Trước
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                                >
-                                    1
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                                >
-                                    2
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    aria-current="page"
-                                    className="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700"
-                                >
-                                    3
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                                >
-                                    4
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                                >
-                                    5
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700"
-                                >
-                                    Tiếp
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+
+                    {
+                        <UserListPaginate
+                            pageIndex={pageIndex}
+                            pageSize={pageSize}
+                        />
+                    }
                 </div>
             </div>
         </>
