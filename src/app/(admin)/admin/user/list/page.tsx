@@ -1,10 +1,11 @@
 "use client";
 
 import { api } from "app/utils/api/axios";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import UserListItem from "../components/UserListItem";
 import UserListPaginate from "../components/UserListPaginate";
+import Loading from "./loading";
 
 interface User {
     id: number;
@@ -18,6 +19,8 @@ interface User {
 export default function UserListPage() {
     const searchParams = useSearchParams();
 
+    const [loading, setLoading] = useState(false);
+
     const pageSize = 10;
     const pageIndex = searchParams.get("p")
         ? parseInt(searchParams.get("p") as string)
@@ -28,6 +31,7 @@ export default function UserListPage() {
 
     useEffect(() => {
         const getUserList = async () => {
+            setLoading(true);
             try {
                 const res = await api.get("/users/phan-trang-tim-kiem", {
                     params: {
@@ -41,7 +45,9 @@ export default function UserListPage() {
                     return <UserListItem user={user} key={user.id} />;
                 });
                 setUserList(userList);
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 console.error(error);
             }
         };
@@ -131,7 +137,9 @@ export default function UserListPage() {
                                 <th scope="col" className="px-6 py-3"></th>
                             </tr>
                         </thead>
-                        <tbody>{userList}</tbody>
+                        <Suspense fallback={<Loading />}>
+                            <tbody>{loading ? <Loading /> : userList}</tbody>
+                        </Suspense>
                     </table>
 
                     {

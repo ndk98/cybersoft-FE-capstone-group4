@@ -2,14 +2,20 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Spinner from "app/(admin)/admin/components/Spinner";
 
 export default function AuthLogin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (loading) return;
+
+        setLoading(true);
 
         try {
             const res = await fetch("/api/login", {
@@ -20,12 +26,15 @@ export default function AuthLogin() {
 
             const data = await res.json();
 
+            setLoading(false);
+
             if (res.ok) {
                 window.location.href = "/admin";
             } else {
                 setError(data.message);
             }
         } catch (err: any) {
+            setLoading(false);
             setError(err.response?.data?.message || "Đăng nhập thất bại");
         }
     };
@@ -40,7 +49,7 @@ export default function AuthLogin() {
                 {error && (
                     <p className="mt-8 text-red-500 font-semibold">{error}</p>
                 )}
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleLogin} className="relative">
                     <div className="mt-4">
                         <input
                             type="text"
@@ -66,7 +75,7 @@ export default function AuthLogin() {
                             type="submit"
                             className="w-full p-2 bg-secondary text-white rounded"
                         >
-                            Đăng nhập
+                            {loading ? <Spinner /> : "Đăng nhập"}
                         </button>
                     </div>
                     <div className="mt-4">

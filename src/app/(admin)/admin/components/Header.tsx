@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import profileImage from "../../../../../public/images/profile-picture-5.jpg";
 
 interface User {
@@ -36,7 +36,7 @@ export default function Header() {
         fetchData();
     }, []);
 
-    const handleLogout = async () => {
+    const handleLogout = useCallback(async () => {
         try {
             const res = await fetch("/api/logout", {
                 method: "POST",
@@ -49,7 +49,7 @@ export default function Header() {
         } catch (error) {
             console.error("Failed to fetch data:", error);
         }
-    };
+    }, []);
 
     return (
         <header className="fixed top-0 z-50 w-full bg-white border-b border-gray-200">
