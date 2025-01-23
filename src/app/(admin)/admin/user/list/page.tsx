@@ -1,11 +1,13 @@
 "use client";
 
 import { api } from "app/utils/api/axios";
-import { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import UserListItem from "../components/UserListItem";
 import UserListPaginate from "../components/UserListPaginate";
 import Loading from "./loading";
+import Debounce from "app/libs/debounce";
 
 interface User {
     id: number;
@@ -55,6 +57,10 @@ export default function UserListPage() {
         getUserList();
     }, [pageIndex, pageSize, keyword]);
 
+    const handleSearch = Debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+        setKeyword(e.target.value);
+    }, 700);
+
     return (
         <>
             <h1 className="text-xl font-extrabold">Danh Sách Người Dùng</h1>
@@ -86,14 +92,18 @@ export default function UserListPage() {
                                 type="text"
                                 id="search-input"
                                 className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Tìm kiếm đặt phòng"
+                                placeholder="Tìm kiếm user theo tên"
+                                onChange={handleSearch}
                             />
                         </div>
                     </div>
                     <div>
-                        <button className="px-4 py-1 bg-secondary text-white rounded font-semibold">
+                        <Link
+                            href="/admin/user/create"
+                            className="px-4 py-1 bg-secondary text-white rounded font-semibold"
+                        >
                             Thêm mới
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -137,9 +147,11 @@ export default function UserListPage() {
                                 <th scope="col" className="px-6 py-3"></th>
                             </tr>
                         </thead>
-                        <Suspense fallback={<Loading />}>
-                            <tbody>{loading ? <Loading /> : userList}</tbody>
-                        </Suspense>
+                        <tbody>
+                            <Suspense fallback={<Loading />}>
+                                {loading ? <Loading /> : userList}
+                            </Suspense>
+                        </tbody>
                     </table>
 
                     {
