@@ -2,6 +2,7 @@
 
 import { api } from "app/utils/api/axios";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import UserListItem from "../components/UserListItem";
 import UserListPaginate from "../components/UserListPaginate";
 
@@ -15,8 +16,13 @@ interface User {
 }
 
 export default function UserListPage() {
+    const searchParams = useSearchParams();
+
     const pageSize = 10;
-    const [pageIndex, setPageIndex] = useState(1);
+    const pageIndex = searchParams.get("p")
+        ? parseInt(searchParams.get("p") as string)
+        : 1;
+
     const [keyword, setKeyword] = useState("");
     const [userList, setUserList] = useState("");
 

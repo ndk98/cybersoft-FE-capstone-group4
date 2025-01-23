@@ -1,5 +1,6 @@
 import { api } from "app/utils/api/axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function UserListPaginate({
     pageIndex,
@@ -8,6 +9,10 @@ export default function UserListPaginate({
     pageIndex: number;
     pageSize: number;
 }) {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
     const [total, setTotal] = useState(0);
     const [pageTotal, setPageTotal] = useState(0);
 
@@ -26,12 +31,34 @@ export default function UserListPaginate({
         getTotal();
     }, []);
 
-    const maxPage = 5;
+    const handleChangePage = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        const index = e.currentTarget.getAttribute("data-index");
+        if (index) {
+            let query = searchParams.toString();
+            if (query) {
+                if (query.includes("p=")) {
+                    query = query.replace(/p=\d+/, `p=${index}`);
+                }
+            } else {
+                query = `p=${index}`;
+            }
+            router.push(`${pathname}?${query}`);
+        }
+    };
 
+    const currentPage = searchParams.get("p")
+        ? parseInt(searchParams.get("p") as string)
+        : 1;
+    let maxPage = 5;
     const pageItems = () => {
         const items = [];
 
-        if (pageIndex > maxPage) {
+        let i = 1;
+
+        if (currentPage >= maxPage) {
+            i = currentPage - 2;
+            maxPage = currentPage + 2;
             items.push(
                 <li key={1}>
                     <a
@@ -44,7 +71,7 @@ export default function UserListPaginate({
             );
         }
 
-        for (let i = 1; i <= pageTotal; i++) {
+        for (i; i <= pageTotal; i++) {
             if (i > maxPage) {
                 items.push(
                     <li key={i}>
@@ -67,6 +94,8 @@ export default function UserListPaginate({
                                 ? "bg-gray-100 text-gray-700"
                                 : "hover:bg-gray-100 hover:text-gray-700"
                         }`}
+                        data-index={i}
+                        onClick={handleChangePage}
                     >
                         {i}
                     </a>
@@ -76,6 +105,9 @@ export default function UserListPaginate({
         return items;
     };
 
+    const from = (pageIndex - 1) * pageSize + 1;
+    const to = pageIndex * pageSize > total ? total : pageIndex * pageSize;
+
     return (
         <nav
             className="flex items-center flex-column flex-wrap md:flex-row justify-between p-4"
@@ -84,7 +116,7 @@ export default function UserListPaginate({
             <span className="text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto">
                 Hiển thị{" "}
                 <span className="font-semibold text-gray-900">
-                    {pageIndex}-{pageIndex * pageSize}
+                    {from}-{to}
                 </span>{" "}
                 của <span className="font-semibold text-gray-900">{total}</span>
             </span>
