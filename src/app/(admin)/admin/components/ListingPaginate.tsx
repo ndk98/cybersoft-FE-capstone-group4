@@ -1,35 +1,18 @@
-import { api } from "app/utils/api/axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export default function UserListPaginate({
+export default function ListingPaginate({
     pageIndex,
     pageSize,
+    totalRow,
 }: {
     pageIndex: number;
     pageSize: number;
+    totalRow: number;
 }) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
-
-    const [total, setTotal] = useState(0);
-    const [pageTotal, setPageTotal] = useState(0);
-
-    useEffect(() => {
-        const getTotal = async () => {
-            try {
-                const res = await api.get("/users");
-                const resData = res.data.content;
-                setTotal(resData.length);
-                setPageTotal(Math.ceil(resData.length / pageSize));
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        getTotal();
-    }, []);
 
     const handleChangePage = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
@@ -47,6 +30,7 @@ export default function UserListPaginate({
         }
     };
 
+    const totalPage = Math.ceil(totalRow / pageSize);
     const currentPage = searchParams.get("p")
         ? parseInt(searchParams.get("p") as string)
         : 1;
@@ -71,7 +55,7 @@ export default function UserListPaginate({
             );
         }
 
-        for (i; i <= pageTotal; i++) {
+        for (i; i <= totalPage; i++) {
             if (i > maxPage) {
                 items.push(
                     <li key={i}>
@@ -106,7 +90,8 @@ export default function UserListPaginate({
     };
 
     const from = (pageIndex - 1) * pageSize + 1;
-    const to = pageIndex * pageSize > total ? total : pageIndex * pageSize;
+    const to =
+        pageIndex * pageSize > totalRow ? totalRow : pageIndex * pageSize;
 
     return (
         <nav
@@ -118,7 +103,8 @@ export default function UserListPaginate({
                 <span className="font-semibold text-gray-900">
                     {from}-{to}
                 </span>{" "}
-                của <span className="font-semibold text-gray-900">{total}</span>
+                của{" "}
+                <span className="font-semibold text-gray-900">{totalRow}</span>
             </span>
             <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
                 <li>

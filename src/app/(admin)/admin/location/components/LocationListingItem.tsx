@@ -1,24 +1,20 @@
-interface User {
+import React from "react";
+
+interface Location {
     id: number;
-    name: string;
-    email: string;
-    phone: string;
-    birthDate: string;
-    gender: boolean;
+    tenViTri: string;
+    tinhThanh: string;
+    quocGia: string;
+    hinhAnh: string;
 }
 
-export default function UserListItem({
-    disabled,
-    user,
+export default function LocationListingItem({
+    location,
 }: {
-    disabled: boolean;
-    user: User;
+    location: Location;
 }) {
     return (
-        <tr
-            className={`bg-white border-b ${disabled ? "pointer-events-none opacity-50" : ""}`}
-            key={user.id}
-        >
+        <tr className="bg-white border-b">
             <td className="w-4 p-4">
                 <div className="flex items-center">
                     <input
@@ -38,13 +34,11 @@ export default function UserListItem({
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
             >
-                {user.id}
+                {location.id}
             </th>
-            <td className="px-6 py-4">{user.name}</td>
-            <td className="px-6 py-4">{user.email}</td>
-            <td className="px-6 py-4">{user.phone}</td>
-            <td className="px-6 py-4">{user.birthDate}</td>
-            <td className="px-6 py-4">{user.gender}</td>
+            <td className="px-6 py-4">{location.tenViTri}</td>
+            <td className="px-6 py-4">{location.tinhThanh}</td>
+            <td className="px-6 py-4">{location.quocGia}</td>
             <td className="px-6 py-4 flex gap-2">
                 <a
                     href="#"

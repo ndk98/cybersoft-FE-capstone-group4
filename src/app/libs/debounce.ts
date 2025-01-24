@@ -1,4 +1,4 @@
-export default function Debounce(
+export default function debounce(
     callback: (...args: any) => void,
     wait: number,
 ) {

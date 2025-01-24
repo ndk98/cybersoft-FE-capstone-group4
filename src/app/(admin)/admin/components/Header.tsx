@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 import profileImage from "../../../../../public/images/profile-picture-5.jpg";
+import { getAdminUser } from "app/(admin)/admin/services/authService";
 
 interface User {
     name: string;
@@ -15,21 +16,9 @@ export default function Header() {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const res = await fetch("/api/verify", {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" },
-                });
-
-                if (res.status === 401) {
-                    window.location.href = "/admin";
-                }
-
-                const data = await res.json();
-
-                setUser(data.user);
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
+            const res = await getAdminUser();
+            if (res) {
+                setUser(res);
             }
         };
 

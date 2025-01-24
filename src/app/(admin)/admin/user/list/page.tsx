@@ -1,13 +1,13 @@
 "use client";
 
 import { api } from "app/utils/api/axios";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import UserListItem from "../components/UserListItem";
-import UserListPaginate from "../components/UserListPaginate";
-import Loading from "./loading";
-import Debounce from "app/libs/debounce";
+import ListingPaginate from "../../components/ListingPaginate";
+import { getAdminUser } from "app/(admin)/admin/services/authService";
+import Spinner from "app/(admin)/admin/components/Spinner";
+import debounce from "app/libs/debounce";
 
 interface User {
     id: number;
@@ -21,20 +21,27 @@ interface User {
 export default function UserListPage() {
     const searchParams = useSearchParams();
 
+    const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [keyword, setKeyword] = useState("");
+    const [userList, setUserList] = useState<React.ReactNode[]>([]);
+    const [totalRow, setTotalRow] = useState(0);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
 
     const pageSize = 10;
     const pageIndex = searchParams.get("p")
         ? parseInt(searchParams.get("p") as string)
         : 1;
 
-    const [keyword, setKeyword] = useState("");
-    const [userList, setUserList] = useState("");
-
     useEffect(() => {
         const getUserList = async () => {
             setLoading(true);
             try {
+                const currentUser = await getAdminUser();
+                if (currentUser) {
+                    setCurrentUser(currentUser);
+                }
+
                 const res = await api.get("/users/phan-trang-tim-kiem", {
                     params: {
                         pageIndex,
@@ -44,20 +51,28 @@ export default function UserListPage() {
                 });
                 const resData = res.data;
                 const userList = resData.content.data.map((user: User) => {
-                    return <UserListItem user={user} key={user.id} />;
+                    return (
+                        <UserListItem
+                            disabled={currentUser && currentUser.id === user.id}
+                            user={user}
+                            key={user.id}
+                        />
+                    );
                 });
                 setUserList(userList);
+                setTotalRow(resData.content.totalRow);
                 setLoading(false);
             } catch (error) {
+                setError("Failed to fetch user list");
+            } finally {
                 setLoading(false);
-                console.error(error);
             }
         };
 
         getUserList();
     }, [pageIndex, pageSize, keyword]);
 
-    const handleSearch = Debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
         setKeyword(e.target.value);
     }, 700);
 
@@ -97,14 +112,7 @@ export default function UserListPage() {
                             />
                         </div>
                     </div>
-                    <div>
-                        <Link
-                            href="/admin/user/create"
-                            className="px-4 py-1 bg-secondary text-white rounded font-semibold"
-                        >
-                            Thêm mới
-                        </Link>
-                    </div>
+                    <div></div>
                 </div>
 
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -147,20 +155,18 @@ export default function UserListPage() {
                                 <th scope="col" className="px-6 py-3"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <Suspense fallback={<Loading />}>
-                                {loading ? <Loading /> : userList}
-                            </Suspense>
-                        </tbody>
+                        <tbody>{loading ? <Spinner /> : userList}</tbody>
                     </table>
 
                     {
-                        <UserListPaginate
+                        <ListingPaginate
                             pageIndex={pageIndex}
                             pageSize={pageSize}
+                            totalRow={totalRow}
                         />
                     }
                 </div>
+                {error && <div className="text-red-500">{error}</div>}
             </div>
         </>
     );
