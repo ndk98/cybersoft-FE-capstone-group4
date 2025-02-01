@@ -9,7 +9,7 @@ export default function Room() {
               src="https://airbnbnew.cybersoft.edu.vn/images/phong1.jpg"
               alt=""
             />
-      <div className="grid grid-cols-2 mt-4">
+      <div className="md:grid md:grid-cols-2 md:gap-8 mt-4">
         <div id="detailInformation">
           <h2 className="font-semibold text-xl py-4">Giới thiệu về chỗ ở này</h2>
           <p className="mb-8">NewApt D1 - Cozy studio - NU apt - 500m Bui Vien offers an unparalleled view of the city and a rich history of local cuisine. This cozy studio is perfect for those looking for a perfect escape from the daily commute. The 500m walk to the city center is perfect for walking or cycling, making it a great choice for those who enjoy a nice break from their daily routine.</p>
@@ -83,12 +83,12 @@ export default function Room() {
         <div id="booking" className="ml-32 mt-16">
           
 
-          <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-xl dark:bg-gray-800 dark:border-gray-700">
+          <div className="max-w-sm text-center m-auto bg-white border border-gray-200 rounded-lg shadow-xl dark:bg-gray-800 dark:border-gray-700">
             <div className="p-5">
               
               <h5 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">200.000d/ đêm</h5>
 
-              <div id="date-range-picker" date-rangepicker className="flex items-center mb-4">
+              <div id="date-range-picker" date-rangepicker="true" className="flex items-center mb-4">
                 <div className="relative">
                   <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                     <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -107,8 +107,28 @@ export default function Room() {
                   <input id="datepicker-range-end" name="end" type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Trả phòng" />
                 </div>
               </div>
+              <div className="mb-4">
+                <h5 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">Khách:</h5>
+                <div className=" text-center align-middle">
+                <button
+              
+              type="button"
+              className="mr-4 text-black bg-pink-200 hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2"
+            >
+              -
+            </button>
 
-              <h5 className="mb-4 text-lg font-bold tracking-tight text-gray-900 dark:text-white">Khách:</h5>
+            <span className="">1</span>
+            <button
+            
+              type="button"
+              className="ml-4 text-black bg-pink-200 hover:bg-pink-800 focus:outline-none focus:ring-4 focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+            >
+              +
+            </button>
+                </div>
+                
+              </div>
               
               <button type="button" className=" py-2.5 px-32 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-pink-400 rounded-lg border border-gray-200 hover:bg-pink-600 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100  ">Đặt phòng</button>
 
@@ -117,6 +137,30 @@ export default function Room() {
             </div>
 
           </div>
+
+
+        </div>
+        
+        <div >
+            
+        <div className="p-1 bg-pink-500 rounded-md"></div>
+          <article className="mt-8">
+            
+            <div className="col-span-2 mt-6 md:mt-0">
+              <div className="flex items-start mb-5">
+                <div className="pe-4">
+                  <footer>
+                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">Reviewed: <time dateTime="2022-01-20 19:00">January 20, 2022</time></p>
+                  </footer>
+                  <h4 className="text-xl font-bold text-gray-900 dark:text-white">Spotless, good appliances, excellent layout, host was genuinely nice and helpful.</h4>
+                </div>
+                <p className="bg-pink-700 text-white text-sm font-semibold inline-flex items-center p-1.5 rounded-xs">8.7</p>
+              </div>
+              <p className="mb-2 text-gray-500 dark:text-gray-400">The flat was spotless, very comfortable, and the host was amazing. I highly recommend this accommodation for anyone visiting New York city centre. It's quite a while since we are no longer using hotel facilities but self contained places. And the main reason is poor cleanliness and staff not being trained properly. This place exceeded our expectation and will return for sure.</p>
+              <p className="mb-5 text-gray-500 dark:text-gray-400">It is obviously not the same build quality as those very expensive watches. But that is like comparing a Citroën to a Ferrari. This watch was well under £100! An absolute bargain.</p>
+              
+            </div>
+          </article>
 
 
         </div>
